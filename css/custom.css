@@ -1,0 +1,266 @@
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+/* General Reset & Typography */
+body,
+html {
+    font-family: 'Inter', sans-serif;
+    color: #e0e0e0;
+    background-color: #1a1a1a;
+}
+
+/* Dark Mode Map Filter */
+.leaflet-tile-pane {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+/* Title Card / Overlay */
+.map-title-card {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    /* Reset right positioning */
+    z-index: 1000;
+    background: rgba(45, 45, 45, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 300px;
+}
+
+.search-container {
+    margin-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+}
+
+.search-container label {
+    display: block;
+    font-size: 0.8rem;
+    color: #b0b0b0;
+    margin-bottom: 5px;
+}
+
+.search-box {
+    display: flex;
+    gap: 5px;
+}
+
+.search-box input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 8px;
+    color: #fff;
+    width: 100%;
+    outline: none;
+    font-family: inherit;
+}
+
+.search-box input:focus {
+    border-color: #4a90e2;
+}
+
+.search-box button {
+    background: #4a90e2;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    width: 36px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-box button:hover {
+    background: #357abd;
+}
+
+.map-title-card h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.map-title-card p {
+    margin: 5px 0 0 0;
+    font-size: 0.9rem;
+    color: #b0b0b0;
+}
+
+/* Leaflet Layout Adjustments */
+/* Move Zoom Control lower to avoid overlapping with potential top-left elements if any, or just style it */
+.leaflet-top.leaflet-left {
+    top: 20px;
+    left: 20px;
+}
+
+/* Customizing Zoom Control */
+.leaflet-bar {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.leaflet-bar a {
+    background-color: rgba(45, 45, 45, 0.9);
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 18px;
+    transition: background-color 0.2s ease;
+}
+
+.leaflet-bar a:hover {
+    background-color: #4a4a4a;
+    color: #fff;
+}
+
+.leaflet-bar a:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.leaflet-bar a:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom: none;
+}
+
+/* Customizing Layer Control */
+.leaflet-control-layers {
+    background: rgba(45, 45, 45, 0.85);
+    backdrop-filter: blur(10px);
+    color: #e0e0e0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+}
+
+.leaflet-control-layers-expanded {
+    padding: 15px;
+    min-width: 180px;
+}
+
+.leaflet-control-layers-separator {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 10px 0;
+}
+
+/* Customizing Popups */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+.leaflet-popup-content {
+    margin: 15px;
+    line-height: 1.5;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    color: #b0b0b0;
+    font-size: 24px;
+    padding: 8px 8px 0 0;
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover {
+    color: #fff;
+}
+
+/* Popup Table Styling */
+.leaflet-popup-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+}
+
+.leaflet-popup-content th {
+    text-align: left;
+    color: #b0b0b0;
+    font-weight: 600;
+    padding: 4px 8px 4px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.leaflet-popup-content td {
+    color: #fff;
+    padding: 4px 0 4px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.leaflet-popup-content tr:last-child th,
+.leaflet-popup-content tr:last-child td {
+    border-bottom: none;
+}
+
+.leaflet-control-locate a {
+    background-color: rgba(45, 45, 45, 0.9);
+    color: #fff;
+    cursor: pointer;
+}
+
+.leaflet-control-locate a:hover {
+    background-color: #4a4a4a;
+    color: #fff;
+}
+
+.leaflet-control-locate.active a {
+    color: #4a90e2;
+}
+
+/* Home Control */
+.leaflet-control-home a {
+    background-color: rgba(45, 45, 45, 0.9);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    /* Adjust icon size */
+    width: 30px;
+    /* Force Leaflet bar dimensions */
+    height: 30px;
+    text-decoration: none;
+}
+
+/* Lot Labels */
+.leaflet-tooltip.lote-label {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: #ffffff;
+    font-size: 8pt;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+    /* Shadow for better contrast */
+    padding: 0;
+}
+
+/* Logo Control */
+.leaflet-control-logo {
+    margin-top: 10px !important;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.leaflet-control-logo img {
+    width: 150px;
+    /* Adjust based on generated image */
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}

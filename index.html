@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- CDN Links for Libraries -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/whatsapp.css">
+
+    <style>
+        html,
+        body,
+        #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <title>Mapa de Lotes</title>
+</head>
+
+<body>
+    <div id="map">
+        <div class="map-title-card">
+            <h1>Mapa de Lotes</h1>
+            <p>Estado de ventas y disponibilidad</p>
+            <div class="search-container">
+                <label for="search-input">Buscar Lote</label>
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Ej: Lote 10">
+                    <button onclick="searchLote()"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WhatsApp Floating Button -->
+        <a href="https://wa.me/56974300363?text=Hola,%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20lotes"
+            class="whatsapp-float" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- CDN Script for Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js"
+        charset="utf-8"></script>
+
+    <!-- Dummy Data Files -->
+    <script src="data/Reservadas_2.js"></script>
+    <script src="data/Vendidas_3.js"></script>
+    <script src="data/Disponibles_4.js"></script>
+
+    <script>
+        // Initialize Map and Bounds
+        var initialBounds = [[-36.124, -71.785], [-36.116, -71.767]];
+        var map = L.map('map', {
+            zoomControl: false, maxZoom: 28, minZoom: 1
+        }).fitBounds(initialBounds);
+
+        // Attribution
+        map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+
+        // Controls
+        L.control.zoom({ position: 'topleft' }).addTo(map);
+        L.control.locate({ position: 'topleft' }).addTo(map);
+
+        // Custom "Zoom Home" Control
+        L.Control.ZoomHome = L.Control.extend({
+            options: { position: 'topleft' },
+            onAdd: function (map) {
+                var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-home');
+                var button = L.DomUtil.create('a', 'fas fa-house', container);
+                button.href = '#';
+                button.title = 'Vista Inicial';
+                button.onclick = function (e) {
+                    e.preventDefault();
+                    map.fitBounds(initialBounds);
+                };
+                return container;
+            }
+        });
+        new L.Control.ZoomHome().addTo(map);
+
+        // Basemaps
+        map.createPane('pane_OpenStreetMap_0');
+        map.getPane('pane_OpenStreetMap_0').style.zIndex = 400;
+        var layer_OpenStreetMap_0 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OpenStreetMap_0',
+            opacity: 1.0,
+            minZoom: 1,
+            maxZoom: 28
+        }).addTo(map);
+
+        map.createPane('pane_Satelite_1');
+        map.getPane('pane_Satelite_1').style.zIndex = 401;
+        var layer_Satelite_1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_Satelite_1',
+            opacity: 1.0,
+            minZoom: 1,
+            maxZoom: 28
+        });
+
+        // Styles & Popups (Simplified for correct functioning with dummy data)
+        function style_Reservadas(feature) {
+            return { pane: 'pane_Reservadas_2', color: '#ffffff', weight: 1, fill: true, fillOpacity: 0.5, fillColor: 'rgba(255,255,51,1)' };
+        }
+        function style_Vendidas(feature) {
+            return { pane: 'pane_Vendidas_3', color: '#ffffff', weight: 1, fill: true, fillOpacity: 0.5, fillColor: 'rgba(227,39,26,1)' };
+        }
+        function style_Disponibles(feature) {
+            return { pane: 'pane_Disponibles_4', color: '#ffffff', weight: 1, fill: true, fillOpacity: 0.5, fillColor: 'rgba(31,175,5,1)' };
+        }
+
+        function onEachFeature(feature, layer) {
+            if (feature.properties) {
+                // Popup Content
+                var content = "<table>";
+                for (var key in feature.properties) {
+                    content += "<tr><th>" + key + "</th><td>" + feature.properties[key] + "</td></tr>";
+                }
+                content += "</table>";
+                layer.bindPopup(content);
+
+                // Label (Tooltip) - White, size 8pt
+                if (feature.properties['Lote']) {
+                    layer.bindTooltip(feature.properties['Lote'], {
+                        permanent: true,
+                        direction: "center",
+                        className: "lote-label"
+                    });
+                }
+            }
+        }
+
+        // Panes
+        map.createPane('pane_Reservadas_2'); map.getPane('pane_Reservadas_2').style.zIndex = 402;
+        map.createPane('pane_Vendidas_3'); map.getPane('pane_Vendidas_3').style.zIndex = 403;
+        map.createPane('pane_Disponibles_4'); map.getPane('pane_Disponibles_4').style.zIndex = 404;
+
+        // Layers
+        var layer_Reservadas_2 = L.geoJson(json_Reservadas_2, { pane: 'pane_Reservadas_2', style: style_Reservadas, onEachFeature: onEachFeature });
+        var layer_Vendidas_3 = L.geoJson(json_Vendidas_3, { pane: 'pane_Vendidas_3', style: style_Vendidas, onEachFeature: onEachFeature });
+        var layer_Disponibles_4 = L.geoJson(json_Disponibles_4, { pane: 'pane_Disponibles_4', style: style_Disponibles, onEachFeature: onEachFeature }).addTo(map);
+
+        // Toggle Layers
+        var baseMaps = { "OpenStreetMap": layer_OpenStreetMap_0, "Satelite": layer_Satelite_1 };
+        var overlayMaps = {
+            '<span style="color:#ffff33">■</span> Reservadas': layer_Reservadas_2,
+            '<span style="color:#e3271a">■</span> Vendidas': layer_Vendidas_3,
+            '<span style="color:#1faf05">■</span> Disponibles': layer_Disponibles_4
+        };
+
+        L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
+
+        // Custom Logo Control
+        L.Control.Logo = L.Control.extend({
+            options: { position: 'topright' },
+            onAdd: function (map) {
+                var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-logo');
+                container.innerHTML = '<img src="images/logo_5_tierras.png" alt="Inmobiliaria 5 Tierras">';
+                return container;
+            }
+        });
+        new L.Control.Logo().addTo(map);
+
+        // Search Logic
+        function searchLote() {
+            var query = document.getElementById('search-input').value.toLowerCase().trim();
+            if (!query) return;
+
+            var found = false;
+            var layersToCheck = [layer_Disponibles_4, layer_Vendidas_3, layer_Reservadas_2];
+
+            for (var i = 0; i < layersToCheck.length; i++) {
+                var layerGroup = layersToCheck[i];
+                layerGroup.eachLayer(function (layer) {
+                    if (found) return; // Stop if already found
+
+                    var loteName = layer.feature.properties['Lote'];
+                    if (loteName && loteName.toLowerCase().includes(query)) {
+                        map.fitBounds(layer.getBounds());
+                        layer.openPopup();
+                        found = true;
+                    }
+                });
+                if (found) break;
+            }
+
+            if (!found) {
+                alert("Lote no encontrado: " + query);
+            }
+        }
+
+        // Allow Enter key to search
+        document.getElementById('search-input').addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                searchLote();
+            }
+        });
+    </script>
+</body>
+
+</html>
