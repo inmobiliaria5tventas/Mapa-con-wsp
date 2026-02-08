@@ -175,16 +175,16 @@
         map.createPane('pane_Disponibles_4'); map.getPane('pane_Disponibles_4').style.zIndex = 404;
 
         // Layers
-        var layer_Reservadas_2 = L.geoJson(json_Reservadas_2, { pane: 'pane_Reservadas_2', style: style_Reservadas, onEachFeature: onEachFeature });
-        var layer_Vendidas_3 = L.geoJson(json_Vendidas_3, { pane: 'pane_Vendidas_3', style: style_Vendidas, onEachFeature: onEachFeature });
-        var layer_Disponibles_4 = L.geoJson(json_Disponibles_4, { pane: 'pane_Disponibles_4', style: style_Disponibles, onEachFeature: onEachFeature }).addTo(map);
+        window.layer_Reservadas_2 = L.geoJson(json_Reservadas_2, { pane: 'pane_Reservadas_2', style: style_Reservadas, onEachFeature: onEachFeature }).addTo(map);
+        window.layer_Vendidas_3 = L.geoJson(json_Vendidas_3, { pane: 'pane_Vendidas_3', style: style_Vendidas, onEachFeature: onEachFeature }).addTo(map);
+        window.layer_Disponibles_4 = L.geoJson(json_Disponibles_4, { pane: 'pane_Disponibles_4', style: style_Disponibles, onEachFeature: onEachFeature }).addTo(map);
 
         // Toggle Layers
         var baseMaps = { "OpenStreetMap": layer_OpenStreetMap_0, "Satelite": layer_Satelite_1 };
         var overlayMaps = {
-            '<span style="color:#ffff33">■</span> Reservadas': layer_Reservadas_2,
-            '<span style="color:#e3271a">■</span> Vendidas': layer_Vendidas_3,
-            '<span style="color:#1faf05">■</span> Disponibles': layer_Disponibles_4
+            '<span style="color:#ffff33">■</span> Reservadas': window.layer_Reservadas_2,
+            '<span style="color:#e3271a">■</span> Vendidas': window.layer_Vendidas_3,
+            '<span style="color:#1faf05">■</span> Disponibles': window.layer_Disponibles_4
         };
 
         L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);

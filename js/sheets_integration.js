@@ -1,72 +1,70 @@
-// Google Sheets Integration Script
-// This script fetches lot status from the published Google Sheet CSV
 
-// User provided URL (Converted from pubhtml to csv for machine reading)
+// Google Sheets Integration Script - DEBUG VERSION
+console.log("Sheet Integration Script: Cargado correctamente.");
+
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTe2wDCmyS4tXfEtPae_EO04Ut2HP2lutyKCMJQlBI5O-3HBQZ2BseyoxdEm59mjAtn7IJOwQ2XZzjp/pub?output=csv";
 
-// Styles for different statuses
 const STATUS_STYLES = {
-    'Disponible': { color: '#ffffff', fillColor: 'rgba(31,175,5,1)', fillOpacity: 0.5 }, // Green
-    'Vendido': { color: '#ffffff', fillColor: 'rgba(227,39,26,1)', fillOpacity: 0.5 },    // Red
-    'Reservado': { color: '#ffffff', fillColor: 'rgba(255,255,51,1)', fillOpacity: 0.5 }  // Yellow
+    'disponible': { color: '#ffffff', fillColor: 'rgba(31,175,5,1)', fillOpacity: 0.5 },
+    'vendido': { color: '#ffffff', fillColor: 'rgba(227,39,26,1)', fillOpacity: 0.5 },
+    'reservado': { color: '#ffffff', fillColor: 'rgba(255,255,51,1)', fillOpacity: 0.5 }
 };
 
 async function updateLotStatusFromSheets() {
-    console.log("Fetching status from Google Sheets...");
+    console.log("Sheet Integration: Iniciando proceso...");
+    const subtitle = document.querySelector('.map-title-card p');
+    if (subtitle) {
+        subtitle.innerText = "Intentando conectar con Google Sheets... 🔄";
+    }
 
     try {
         const response = await fetch(SHEET_CSV_URL);
-        const data = await response.text();
+        console.log("Sheet Integration: Respuesta recibida", response.status);
 
-        // Parse CSV
-        // Assuming formatting: Lote Name, Status, Price, etc.
-        const rows = data.split('\n').slice(1); // Skip header
+        if (!response.ok) throw new Error("Error en respuesta de red");
 
+        const text = await response.text();
+        const rows = text.split(/\r?\n/);
         const lotStatusMap = {};
 
-        rows.forEach(row => {
-            // Handle CSV parsing carefully (simple split for now)
-            const cols = row.split(',');
-            if (cols.length < 2) return;
+        for (let i = 1; i < rows.length; i++) {
+            const cols = rows[i].split(',');
+            if (cols.length < 2) continue;
+            const loteName = cols[0].trim().toLowerCase();
+            const status = cols[1].trim().toLowerCase();
+            if (loteName) lotStatusMap[loteName] = status;
+        }
 
-            // Adjust these indices based on your REAL Sheet columns
-            // Example: Column A (0) = Lot Name ("Lote 1"), Column B (1) = Status
-            const loteName = cols[0].trim();
-            const status = cols[1].trim();
+        console.log("Sheet Integration: Actualizando capas...");
+        const layers = [window.layer_Reservadas_2, window.layer_Vendidas_3, window.layer_Disponibles_4];
 
-            if (loteName) {
-                lotStatusMap[loteName.toLowerCase()] = status;
-            }
-        });
-
-        console.log("Lot Status Map:", lotStatusMap);
-
-        // Update Map Layers
-        // We need to iterate over all layers in the map and match them by 'Lote' property
-        map.eachLayer(function (layer) {
-            if (layer.feature && layer.feature.properties && layer.feature.properties['Lote']) {
-                const loteName = layer.feature.properties['Lote'].toLowerCase();
-                const newStatus = lotStatusMap[loteName];
-
-                if (newStatus && STATUS_STYLES[newStatus]) {
-                    layer.setStyle(STATUS_STYLES[newStatus]);
-
-                    // Optional: Update popup content with new status
-                    // This is complex because popup content is HTML string. 
-                    // For now, visual color update is the priority.
+        layers.forEach(layerGroup => {
+            if (!layerGroup) return;
+            layerGroup.eachLayer(function (layer) {
+                if (layer.feature && layer.feature.properties && layer.feature.properties['Lote']) {
+                    const loteName = layer.feature.properties['Lote'].toLowerCase();
+                    const newStatus = lotStatusMap[loteName];
+                    if (newStatus && STATUS_STYLES[newStatus]) {
+                        layer.setStyle(STATUS_STYLES[newStatus]);
+                        layer.feature.properties['Estado'] = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+                    }
                 }
-            }
+            });
         });
 
-        console.log("Map updated with Google Sheets data.");
+        if (subtitle) {
+            subtitle.innerText = "Sincronizado con Google Sheets ✅";
+            subtitle.style.color = "#C5A065";
+        }
 
     } catch (error) {
-        console.error("Error fetching Google Sheet data:", error);
+        console.error("Sheet Integration Error:", error);
+        if (subtitle) {
+            subtitle.innerText = "Error: Falla al leer el Excel ❌";
+            subtitle.style.color = "#ff4d4d";
+        }
     }
 }
 
-// Call function when page loads
-document.addEventListener('DOMContentLoaded', function () {
-    // Wait a brief moment to ensure map layers are loaded
-    setTimeout(updateLotStatusFromSheets, 1000);
-});
+// Start after a delay
+setTimeout(updateLotStatusFromSheets, 3000);
