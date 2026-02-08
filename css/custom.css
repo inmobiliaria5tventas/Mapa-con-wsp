@@ -283,3 +283,19 @@ h4,
     background-color: #C5A065 !important;
     /* Briefly turn gold */
 }
+/* Estilo para botón de contacto directo en popup */
+.popup-wa-btn {
+    display: block;
+    background: #25d366;
+    color: white !important;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+.popup-wa-btn:hover {
+    background: #128c7e;
+}

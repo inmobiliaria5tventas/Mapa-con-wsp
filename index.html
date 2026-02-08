@@ -128,18 +128,24 @@
 
         function onEachFeature(feature, layer) {
             if (feature.properties) {
+                var loteName = feature.properties['Lote'] || "un Lote";
                 // Popup Content
-                var content = "<table>";
-                // Add Lote Name prominently
-                if (feature.properties['Lote']) {
-                    content += "<tr><th colspan='2' style='text-align:center; font-size:1.2em; border-bottom:2px solid #C5A065;'>" + feature.properties['Lote'] + "</th></tr>";
-                }
+                var content = "<div class='popup-content'>";
+                content += "<h3 style='margin:0; text-align:center; color:#C5A065; font-family:\"Playfair Display\", serif; border-bottom:1px solid #C5A065; padding-bottom:10px; margin-bottom:10px;'>" + loteName + "</h3>";
+
+                content += "<table style='width:100%; margin-bottom:15px;'>";
                 for (var key in feature.properties) {
-                    if (key !== 'Lote') { // Skip Lote as it's already in header
-                        content += "<tr><th>" + key + "</th><td>" + feature.properties[key] + "</td></tr>";
+                    if (key !== 'Lote' && key !== 'fid') {
+                        content += "<tr><th style='text-align:left; color:#C5A065;'>" + key + ":</th><td style='text-align:right;'>" + feature.properties[key] + "</td></tr>";
                     }
                 }
                 content += "</table>";
+
+                const phoneNumber = "56974300363";
+                const waUrl = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent("Hola, me interesa más información sobre el " + loteName);
+                content += "<a href='" + waUrl + "' target='_blank' class='popup-wa-btn'>Consultar por WhatsApp</a>";
+                content += "</div>";
+
                 layer.bindPopup(content);
 
                 // Label (Tooltip)
@@ -151,20 +157,23 @@
                     });
                 }
 
-                // CLICK EVENT: Update WhatsApp Button
+                // CLICK EVENT: Update WhatsApp Button and REDIRECT DIRECTLY
                 layer.on('click', function (e) {
                     var loteName = feature.properties['Lote'] || "un lote";
-                    var phoneNumber = "56974300363"; // Your number
+                    var phoneNumber = "56974300363";
                     var message = "Hola, me interesa más información sobre el " + loteName;
                     var whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message);
 
+                    // Update floating button for backup
                     var btn = document.getElementById('whatsapp-btn');
                     if (btn) {
                         btn.href = whatsappUrl;
-                        // Optional: Add visual feedback or small pulse effect
                         btn.classList.add('pulse-effect');
                         setTimeout(() => btn.classList.remove('pulse-effect'), 500);
                     }
+
+                    // DIRECT REDIRECT
+                    window.open(whatsappUrl, '_blank');
                 });
             }
         }
