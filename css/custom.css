@@ -1,176 +1,212 @@
 /* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:wght@400;600;700&display=swap');
 
 /* General Reset & Typography */
 body,
 html {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    /* Body font */
     color: #e0e0e0;
     background-color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+.map-title-card h1 {
+    font-family: 'Playfair Display', serif;
+    /* Premium Heading Font */
 }
 
 /* Dark Mode Map Filter */
+/* Slightly less aggressive inversion for a "richer" dark map */
 .leaflet-tile-pane {
-    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(110%) sepia(20%) saturate(50%);
 }
 
-/* Title Card / Overlay */
+/* Title Card / Overlay - Hacienda Style */
 .map-title-card {
     position: absolute;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
     right: auto;
-    /* Reset right positioning */
     z-index: 1000;
-    background: rgba(45, 45, 45, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 15px 25px;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    max-width: 300px;
-}
 
-.search-container {
-    margin-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 10px;
-}
+    /* Premium Upgrade: Dark Green Background with Gold Border */
+    background: rgba(27, 58, 43, 0.95);
+    /* #1B3A2B - Forest Green */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 
-.search-container label {
-    display: block;
-    font-size: 0.8rem;
-    color: #b0b0b0;
-    margin-bottom: 5px;
-}
-
-.search-box {
-    display: flex;
-    gap: 5px;
-}
-
-.search-box input {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 6px;
-    padding: 8px;
-    color: #fff;
-    width: 100%;
-    outline: none;
-    font-family: inherit;
-}
-
-.search-box input:focus {
-    border-color: #4a90e2;
-}
-
-.search-box button {
-    background: #4a90e2;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    width: 36px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.search-box button:hover {
-    background: #357abd;
+    padding: 20px 30px;
+    border-radius: 4px;
+    /* Sharper corners for elegance */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    border: 1px solid #C5A065;
+    /* Gold Border */
+    max-width: 350px;
+    text-align: center;
 }
 
 .map-title-card h1 {
     margin: 0;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #ffffff;
+    font-size: 1.8rem;
+    /* Larger title */
+    font-weight: 700;
+    color: #C5A065;
+    /* Gold text */
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .map-title-card p {
-    margin: 5px 0 0 0;
+    margin: 8px 0 0 0;
     font-size: 0.9rem;
-    color: #b0b0b0;
+    color: #f0f0f0;
+    font-weight: 300;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
 }
 
-/* Leaflet Layout Adjustments */
-/* Move Zoom Control lower to avoid overlapping with potential top-left elements if any, or just style it */
-.leaflet-top.leaflet-left {
-    top: 20px;
-    left: 20px;
+/* Search Container */
+.search-container {
+    margin-top: 20px;
+    border-top: 1px solid rgba(197, 160, 101, 0.3);
+    /* Faint Gold */
+    padding-top: 15px;
 }
 
-/* Customizing Zoom Control */
+.search-container label {
+    display: block;
+    font-size: 0.75rem;
+    color: #C5A065;
+    /* Gold */
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: left;
+}
+
+.search-box {
+    display: flex;
+    gap: 0;
+    /* Connected input */
+}
+
+.search-box input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #C5A065;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    padding: 10px;
+    color: #fff;
+    width: 100%;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.search-box input:focus {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.search-box button {
+    background: #C5A065;
+    /* Gold Button */
+    border: 1px solid #C5A065;
+    border-radius: 0 4px 4px 0;
+    color: #1B3A2B;
+    /* Green Text/Icon */
+    width: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.search-box button:hover {
+    background: #e0b472;
+    color: #000;
+}
+
+/* Leaflet Controls - Premium Style */
 .leaflet-bar {
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 1px solid #C5A065;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 .leaflet-bar a {
-    background-color: rgba(45, 45, 45, 0.9);
-    color: #fff;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    width: 36px;
-    height: 36px;
-    line-height: 36px;
-    font-size: 18px;
+    background-color: #1B3A2B;
+    /* Green */
+    color: #C5A065;
+    /* Gold */
+    border-bottom: 1px solid #C5A065;
     transition: background-color 0.2s ease;
 }
 
 .leaflet-bar a:hover {
-    background-color: #4a4a4a;
+    background-color: #264d39;
     color: #fff;
 }
 
-.leaflet-bar a:first-child {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
-
 .leaflet-bar a:last-child {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
     border-bottom: none;
 }
 
-/* Customizing Layer Control */
+/* Ensure no rounded corners inside the bar due to Leaflet defaults interacting weirdly */
+.leaflet-bar a:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.leaflet-bar a:last-child {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+
+/* Layer Control Panel */
 .leaflet-control-layers {
-    background: rgba(45, 45, 45, 0.85);
-    backdrop-filter: blur(10px);
-    color: #e0e0e0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    padding: 10px;
+    background: rgba(27, 58, 43, 0.95);
+    /* Green */
+    color: #f0f0f0;
+    border: 1px solid #C5A065;
+    /* Gold */
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 15px;
 }
 
 .leaflet-control-layers-expanded {
-    padding: 15px;
-    min-width: 180px;
+    padding: 20px;
+    min-width: 200px;
 }
 
 .leaflet-control-layers-separator {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin: 10px 0;
+    border-top: 1px solid rgba(197, 160, 101, 0.3);
 }
 
-/* Customizing Popups */
+/* Popups - Premium Card Style */
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
-    background: #2d2d2d;
-    color: #e0e0e0;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
+    background: #1B3A2B;
+    /* Green */
+    color: #f0f0f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    border: 1px solid #C5A065;
+    border-radius: 4px;
 }
 
 .leaflet-popup-content {
-    margin: 15px;
-    line-height: 1.5;
+    margin: 20px;
+    line-height: 1.6;
 }
 
 .leaflet-container a.leaflet-popup-close-button {
-    color: #b0b0b0;
-    font-size: 24px;
+    color: #C5A065;
     padding: 8px 8px 0 0;
 }
 
@@ -178,78 +214,40 @@ html {
     color: #fff;
 }
 
-/* Popup Table Styling */
+/* Popup Table */
 .leaflet-popup-content table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 5px;
 }
 
 .leaflet-popup-content th {
     text-align: left;
-    color: #b0b0b0;
-    font-weight: 600;
-    padding: 4px 8px 4px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #C5A065;
+    /* Gold headers */
+    font-family: 'Playfair Display', serif;
+    font-weight: normal;
+    font-size: 1.1em;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(197, 160, 101, 0.2);
 }
 
 .leaflet-popup-content td {
     color: #fff;
-    padding: 4px 0 4px 8px;
+    padding: 8px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.leaflet-popup-content tr:last-child th,
-.leaflet-popup-content tr:last-child td {
-    border-bottom: none;
-}
-
-.leaflet-control-locate a {
-    background-color: rgba(45, 45, 45, 0.9);
-    color: #fff;
-    cursor: pointer;
-}
-
-.leaflet-control-locate a:hover {
-    background-color: #4a4a4a;
-    color: #fff;
-}
-
-.leaflet-control-locate.active a {
-    color: #4a90e2;
-}
-
-/* Home Control */
-.leaflet-control-home a {
-    background-color: rgba(45, 45, 45, 0.9);
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    /* Adjust icon size */
-    width: 30px;
-    /* Force Leaflet bar dimensions */
-    height: 30px;
-    text-decoration: none;
-}
-
-/* Lot Labels */
+/* Tooltips (Labels) */
 .leaflet-tooltip.lote-label {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    color: #ffffff;
-    font-size: 8pt;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
-    /* Shadow for better contrast */
-    padding: 0;
+    background: rgba(27, 58, 43, 0.8);
+    border: 1px solid #C5A065;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 2px;
 }
 
-/* Logo Control */
+/* Logo Control Fix */
 .leaflet-control-logo {
     margin-top: 10px !important;
     background: transparent;
@@ -258,9 +256,30 @@ html {
 }
 
 .leaflet-control-logo img {
-    width: 150px;
-    /* Adjust based on generated image */
-    height: auto;
+    width: 150px !important;
+    height: auto !important;
+    max-width: 40vw;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Pulse Animation for Feedback */
+@keyframes pulse-gold {
+    0% {
+        box-shadow: 0 0 0 0 rgba(197, 160, 101, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(197, 160, 101, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(197, 160, 101, 0);
+    }
+}
+
+.pulse-effect {
+    animation: pulse-gold 0.5s ease-out;
+    background-color: #C5A065 !important;
+    /* Briefly turn gold */
 }

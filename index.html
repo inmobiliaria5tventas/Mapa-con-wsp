@@ -47,7 +47,8 @@
         </div>
 
         <!-- WhatsApp Floating Button -->
-        <a href="https://wa.me/56974300363?text=Hola,%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20lotes"
+        <a id="whatsapp-btn"
+            href="https://wa.me/56974300363?text=Hola,%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20lotes"
             class="whatsapp-float" target="_blank">
             <i class="fab fa-whatsapp"></i>
         </a>
@@ -129,13 +130,19 @@
             if (feature.properties) {
                 // Popup Content
                 var content = "<table>";
+                // Add Lote Name prominently
+                if (feature.properties['Lote']) {
+                    content += "<tr><th colspan='2' style='text-align:center; font-size:1.2em; border-bottom:2px solid #C5A065;'>" + feature.properties['Lote'] + "</th></tr>";
+                }
                 for (var key in feature.properties) {
-                    content += "<tr><th>" + key + "</th><td>" + feature.properties[key] + "</td></tr>";
+                    if (key !== 'Lote') { // Skip Lote as it's already in header
+                        content += "<tr><th>" + key + "</th><td>" + feature.properties[key] + "</td></tr>";
+                    }
                 }
                 content += "</table>";
                 layer.bindPopup(content);
 
-                // Label (Tooltip) - White, size 8pt
+                // Label (Tooltip)
                 if (feature.properties['Lote']) {
                     layer.bindTooltip(feature.properties['Lote'], {
                         permanent: true,
@@ -143,6 +150,22 @@
                         className: "lote-label"
                     });
                 }
+
+                // CLICK EVENT: Update WhatsApp Button
+                layer.on('click', function (e) {
+                    var loteName = feature.properties['Lote'] || "un lote";
+                    var phoneNumber = "56974300363"; // Your number
+                    var message = "Hola, me interesa más información sobre el " + loteName;
+                    var whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message);
+
+                    var btn = document.getElementById('whatsapp-btn');
+                    if (btn) {
+                        btn.href = whatsappUrl;
+                        // Optional: Add visual feedback or small pulse effect
+                        btn.classList.add('pulse-effect');
+                        setTimeout(() => btn.classList.remove('pulse-effect'), 500);
+                    }
+                });
             }
         }
 
@@ -212,6 +235,7 @@
             }
         });
     </script>
+    <script src="js/sheets_integration.js"></script>
 </body>
 
 </html>
